@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ระบบสะสมแต้มและบัตรสมาชิกดิจิทัลสำหรับโรงแรมและรีสอร์ท | Pointspot</title>
+<meta name="description" content="Pointspot ระบบสะสมแต้ม คูปอง และบัตรสมาชิกดิจิทัลสำหรับโรงแรมและรีสอร์ท รวมยอดใช้จ่ายห้องพัก ห้องอาหาร และสปา ไว้ในบัญชีสมาชิกเดียว สมัครผ่าน LINE OA ไม่ต้องโหลดแอป สร้าง Direct Booking และการกลับมาพักซ้ำ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@500;600&family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#FF6600;
+  --slate:#4C5A68;
+  --ink:#181D27;
+  --muted:#717680;
+  --peach:#FFF6F1;
+  --lorange:#FFEFE4;
+  --border:#F1F2F9;
+  --input:#D7D7D7;
+  --radius:10px;
+  --radius-lg:24px;
+  --shadow:0 5px 30px 0 rgba(25,33,61,.06);
+  --sp-xl:80px; --sp-l:60px; --sp-m:40px; --sp-s:20px; --sp-xs:16px;
+  --pad:120px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Noto Sans Thai','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:16px;line-height:1.7;color:var(--slate);
+  background:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:'IBM Plex Sans Thai','Poppins',sans-serif;color:var(--ink);margin:0;line-height:1.4;font-weight:600;}
+p{margin:0;}
+img{max-width:100%;height:auto;display:block;}
+a{color:inherit;text-decoration:none;}
+.wrap{width:100%;max-width:1280px;margin:0 auto;padding:0 30px;}
+section{padding:var(--sp-l) 0;}
+.eyebrow{display:inline-block;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--orange);
+  background:var(--lorange);border-radius:999px;padding:6px 16px;margin-bottom:var(--sp-xs);}
+.sec-head{max-width:820px;margin:0 auto var(--sp-m);text-align:center;}
+.sec-head h2{font-size:28px;}
+.sec-head p{margin-top:12px;color:var(--muted);font-size:16px;}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Poppins','Noto Sans Thai',sans-serif;font-size:16px;font-weight:600;
+  border-radius:var(--radius);padding:15px 25px;border:1px solid var(--orange);
+  cursor:pointer;transition:.2s ease;text-align:center;}
+.btn-primary{background:var(--orange);color:#fff;box-shadow:0 0 14px rgba(255,102,0,.3);}
+.btn-primary:hover{background:#fff;color:var(--orange);}
+.btn-outline{background:#fff;color:var(--orange);}
+.btn-outline:hover{background:var(--orange);color:#fff;}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.6);}
+.btn-ghost:hover{background:#fff;color:var(--slate);border-color:#fff;}
+
+/* ---------- header ---------- */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:50;
+  background:transparent;border-bottom:1px solid transparent;
+  transition:background .28s ease,border-color .28s ease,box-shadow .28s ease,backdrop-filter .28s ease;}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:var(--sp-s);}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;
+  font-weight:600;font-size:20px;color:#fff;}
+.brand svg{width:32px;height:32px;flex:0 0 auto;}
+.nav{display:none;gap:28px;font-family:'Poppins','Noto Sans Thai',sans-serif;font-size:16px;}
+.nav a{color:rgba(255,255,255,.92);padding-bottom:4px;border-bottom:2px solid transparent;}
+.nav a:hover{color:#fff;border-color:var(--orange);}
+.header-cta{display:none;}
+.site-header.is-scrolled{background:rgba(255,255,255,.96);
+  backdrop-filter:blur(8px);border-bottom-color:var(--border);box-shadow:var(--shadow);}
+.site-header.is-scrolled .brand{color:var(--slate);}
+.site-header.is-scrolled .nav a{color:var(--slate);}
+.site-header.is-scrolled .nav a:hover{color:var(--orange);}
+
+.hero{min-height:100vh;background:
+  linear-gradient(90deg,rgba(18,25,34,.78) 0%,rgba(18,25,34,.56) 42%,rgba(18,25,34,.12) 74%,rgba(18,25,34,.04) 100%),
+  linear-gradient(0deg,rgba(0,0,0,.18),rgba(0,0,0,.18)),
+  url("assets/hotel-resort-hero-bg.jpg") center/cover no-repeat;
+  padding:140px 0 110px;position:relative;overflow:hidden;display:flex;align-items:center;}
+.hero-grid{display:block;position:relative;z-index:2;max-width:760px;}
+.hero h1{font-size:34px;line-height:1.3;color:#fff;text-wrap:balance;}
+.hero h1 span{color:#FFB27D;}
+.hero .lead{margin-top:var(--sp-s);font-size:17px;color:rgba(255,255,255,.84);max-width:680px;}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:var(--sp-m);}
+.hero-cta .btn{flex:1 1 220px;}
+.trust{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:var(--sp-m);
+  font-size:14px;color:rgba(255,255,255,.9);}
+.trust span{display:inline-flex;align-items:center;gap:8px;}
+.trust svg{width:18px;height:18px;stroke:#FFB27D;fill:none;stroke-width:2.2;
+  stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto;}
+.hero .eyebrow{background:rgba(255,255,255,.14);color:#FFD8BF;border:1px solid rgba(255,255,255,.22);}
+.hero .btn-outline{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.64);}
+.hero .btn-outline:hover{background:#fff;color:var(--ink);border-color:#fff;}
+figure{margin:0;}
+
+/* ---------- journey snapshot ---------- */
+.snapshot{background:#182432;color:#fff;padding:var(--sp-l) 0;}
+.snapshot .sec-head h2{color:#fff;}
+.snapshot .sec-head p{color:rgba(255,255,255,.76);}
+.snapshot-grid{display:grid;gap:var(--sp-s);grid-template-columns:1fr;}
+.snap-card{background:#fff;color:var(--slate);border-radius:var(--radius);
+  border-top:5px solid var(--orange);padding:22px;min-height:100%;
+  display:flex;flex-direction:column;box-shadow:0 12px 34px rgba(0,0,0,.18);}
+.snap-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.snap-num{width:38px;height:38px;border-radius:10px;background:var(--orange);color:#fff;
+  font-family:'Poppins',sans-serif;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.snap-kicker{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.snap-card h3{font-size:18px;margin-bottom:6px;}
+.snap-card .sub{font-family:'Poppins','Noto Sans Thai',sans-serif;font-size:13px;color:var(--muted);margin-bottom:12px;}
+.snap-card b{color:var(--ink);}
+.snap-note{margin-top:auto;background:var(--peach);border:1px solid #FFE1CF;border-radius:8px;
+  color:#B84B00;font-weight:700;font-size:13px;line-height:1.5;padding:10px 12px;}
+.snapshot-outcomes{display:grid;gap:12px;grid-template-columns:1fr;margin-top:var(--sp-s);}
+.outcome{border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);padding:16px 18px;
+  background:rgba(255,255,255,.07);}
+.outcome .label{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:#FFB27D;margin-bottom:4px;}
+.outcome p{font-size:15px;color:rgba(255,255,255,.86);}
+
+/* ---------- pain ---------- */
+.pain{background:#fff;}
+.grid-3{display:grid;gap:var(--sp-s);grid-template-columns:1fr;}
+.pain-card{background:rgba(76,90,104,.05);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;}
+.pain-card .n{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:var(--orange);
+  letter-spacing:.1em;}
+.pain-card h3{font-size:18px;margin:10px 0 8px;}
+.pain-card p{font-size:15px;color:var(--muted);}
+.pain-card .fix{margin-top:14px;padding-top:14px;border-top:1px solid var(--input);
+  font-size:14px;color:var(--slate);}
+.pain-card .fix b{color:var(--orange);}
+
+/* ---------- journey ---------- */
+.journey{background:linear-gradient(178deg,#ffffff 60%,#ffefe4 100%);}
+.steps{display:grid;gap:var(--sp-s);grid-template-columns:1fr;}
+.step{background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px;box-shadow:var(--shadow);position:relative;}
+.step .num{width:44px;height:44px;border-radius:12px;background:var(--orange);color:#fff;
+  font-family:'Poppins',sans-serif;font-weight:600;font-size:20px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.step h3{font-size:18px;}
+.step .en{font-family:'Poppins',sans-serif;font-size:13px;color:var(--muted);margin:4px 0 10px;}
+.step p{font-size:15px;color:var(--muted);}
+.step ul{margin:10px 0 0;padding-left:18px;font-size:15px;color:var(--muted);}
+.step li{margin-bottom:6px;}
+.step b{color:var(--slate);}
+.journey-note{margin-top:var(--sp-m);background:#fff;border:1px solid var(--border);
+  border-left:4px solid var(--orange);border-radius:var(--radius);padding:20px 24px;
+  font-size:15px;color:var(--muted);}
+.journey-note b{color:var(--ink);}
+
+/* ---------- features ---------- */
+.features{background:#fff;}
+.feat-grid{display:grid;gap:var(--sp-s);grid-template-columns:1fr;}
+.feat{background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px;box-shadow:var(--shadow);}
+.feat .ic{width:52px;height:52px;border-radius:14px;background:var(--lorange);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.feat .ic svg{width:26px;height:26px;stroke:var(--orange);fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;}
+.feat h3{font-size:18px;margin-bottom:8px;}
+.feat p{font-size:15px;color:var(--muted);}
+.feat.wide{background:var(--slate);color:#fff;border-color:var(--slate);}
+.feat.wide h3{color:#fff;}
+.feat.wide p{color:rgba(255,255,255,.82);}
+.feat.wide .ic{background:rgba(255,255,255,.14);}
+.feat.wide .ic svg{stroke:#fff;}
+
+/* ---------- coupons ---------- */
+.coupons{background:var(--peach);}
+.coupon-grid{display:grid;gap:var(--sp-s);grid-template-columns:1fr;}
+.coupon{background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 24px;position:relative;overflow:hidden;}
+.coupon::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--orange);}
+.coupon .tag{display:inline-block;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--lorange);
+  border-radius:999px;padding:4px 12px;margin-bottom:10px;}
+.coupon h3{font-size:17px;margin-bottom:6px;}
+.coupon p{font-size:15px;color:var(--muted);}
+.coupon .ex{margin-top:12px;font-size:14px;color:var(--slate);
+  background:var(--peach);border-radius:8px;padding:10px 12px;}
+.coupon .ex b{color:var(--orange);}
+
+/* ---------- faq ---------- */
+.faq{background:#fff;}
+.faq-list{max-width:900px;margin:0 auto;}
+details{border:1px solid var(--border);border-radius:var(--radius);background:#fff;
+  box-shadow:var(--shadow);margin-bottom:14px;}
+details[open]{border-color:#FFD9BF;}
+summary{list-style:none;cursor:pointer;padding:20px 56px 20px 24px;position:relative;
+  font-family:'IBM Plex Sans Thai','Poppins',sans-serif;font-weight:600;font-size:17px;color:var(--ink);}
+summary::-webkit-details-marker{display:none;}
+summary::after{content:"+";position:absolute;right:24px;top:16px;font-size:26px;
+  color:var(--orange);font-weight:400;line-height:1.2;}
+details[open] summary::after{content:"–";}
+details .a{padding:0 24px 22px;font-size:15px;color:var(--muted);}
+details .a b{color:var(--slate);}
+details .a p+p{margin-top:10px;}
+
+/* ---------- cta ---------- */
+.cta{background:var(--orange);color:#fff;text-align:center;}
+.cta h2{color:#fff;font-size:28px;}
+.cta p{color:rgba(255,255,255,.92);margin-top:12px;font-size:16px;}
+.cta .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:var(--sp-m);}
+.cta .btn-white{background:#fff;color:var(--orange);border-color:#fff;}
+.cta .btn-white:hover{background:transparent;color:#fff;border-color:#fff;}
+
+/* ---------- footer ---------- */
+.site-footer{background:var(--slate);color:#fff;padding:var(--sp-m) 0;}
+.site-footer .wrap{display:grid;gap:var(--sp-s);}
+.site-footer h4{color:#fff;font-size:16px;margin-bottom:8px;}
+.site-footer p,.site-footer a{font-size:14px;color:rgba(255,255,255,.82);}
+.site-footer a:hover{color:var(--orange);}
+.copy{border-top:1px solid rgba(255,255,255,.18);margin-top:var(--sp-s);padding-top:16px;
+  font-size:13px;color:rgba(255,255,255,.7);}
+
+/* ---------- breakpoints ---------- */
+@media (min-width:640px){
+  .grid-3{grid-template-columns:repeat(2,1fr);}
+  .snapshot-grid{grid-template-columns:repeat(2,1fr);}
+  .snapshot-outcomes{grid-template-columns:repeat(2,1fr);}
+  .steps{grid-template-columns:repeat(2,1fr);}
+  .feat-grid{grid-template-columns:repeat(2,1fr);}
+  .coupon-grid{grid-template-columns:repeat(2,1fr);}
+  .hero h1{font-size:40px;}
+  .sec-head h2{font-size:36px;}
+  .cta h2{font-size:36px;}
+  .site-footer .wrap{grid-template-columns:repeat(3,1fr);}
+}
+@media (min-width:1024px){
+  :root{--sp-l:80px;}
+  .wrap{padding:0 60px;}
+  .nav{display:flex;}
+  .header-cta{display:inline-flex;}
+  .hero h1{font-size:58px;}
+  .hero .lead{font-size:20px;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .snapshot-grid{grid-template-columns:repeat(5,1fr);}
+  .snapshot-outcomes{grid-template-columns:repeat(4,1fr);}
+  .steps{grid-template-columns:repeat(3,1fr);}
+  .step.span2{grid-column:span 1;}
+  .feat-grid{grid-template-columns:repeat(3,1fr);}
+  .feat.wide{grid-column:span 2;}
+  .coupon-grid{grid-template-columns:repeat(3,1fr);}
+  .sec-head h2{font-size:44px;}
+  .cta h2{font-size:44px;}
+  .site-footer .wrap{grid-template-columns:1.4fr 1fr 1fr;}
+}
+@media (min-width:1280px){
+  .wrap{padding:0 40px;}
+  .hero h1{font-size:64px;}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Pointspot">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="#FF6600" stroke-width="3"/><path d="M24 12l3.6 7.4 8.1 1.1-5.9 5.6 1.4 8.1L24 30.4l-7.2 3.8 1.4-8.1-5.9-5.6 8.1-1.1z" fill="none" stroke="#FF6600" stroke-width="2.6" stroke-linejoin="round"/></svg>
+      pointspot
+    </a>
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a href="#pain">ปัญหาที่พบ</a>
+      <a href="#journey">วิธีการทำงาน</a>
+      <a href="#features">ฟีเจอร์เด่น</a>
+      <a href="#coupons">คูปองและเวาเชอร์</a>
+      <a href="#faq">คำถามที่พบบ่อย</a>
+    </nav>
+    <a class="btn btn-primary header-cta" href="#cta">ทดลองใช้ฟรี</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Hotel &amp; Resort</span>
+        <h1>ยกระดับประสบการณ์แขก<br>ให้กลับมาพักซ้ำอย่างมีระดับ</h1>
+        <p class="lead">Pointspot ช่วยให้โรงแรมและรีสอร์ทดูแลสมาชิก สะสมแต้ม และมอบสิทธิพิเศษผ่าน LINE OA ได้อย่างเป็นส่วนตัว ตั้งแต่ห้องพัก ห้องอาหาร ไปจนถึงสปาในโปรไฟล์เดียว</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#cta">ทดลองใช้ฟรี</a>
+          <a class="btn btn-outline" href="#cta">ปรึกษาทีมงาน</a>
+        </div>
+        <div class="trust">
+          <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>ไม่ต้องโหลดแอป ใช้เบอร์โทรศัพท์</span>
+          <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>ใช้ร่วมกับ PMS เดิมได้</span>
+          <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>ฐานข้อมูลลูกค้าเป็นของโรงแรม</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PAIN POINTS ===================== -->
+<section class="pain" id="pain">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Pain Points</span>
+      <h2>ปัญหาที่โรงแรมและรีสอร์ทเจอทุกวัน</h2>
+      <p>ห้องพักเต็ม แต่กำไรไม่โต เพราะรายได้ส่วนใหญ่ยังผูกกับช่องทางที่โรงแรมควบคุมไม่ได้</p>
+    </div>
+    <div class="grid-3">
+
+      <article class="pain-card">
+        <div class="n">01</div>
+        <h3>ค่าคอมมิชชั่น OTA สูง ไม่เกิด Direct Booking</h3>
+        <p>ลูกค้าจองผ่านแพลตฟอร์มภายนอกเป็นหลัก โรงแรมจ่ายค่าคอมมิชชั่นทุกครั้งที่มีการจอง และไม่ได้ข้อมูลติดต่อของแขกไว้ทำการตลาดต่อ</p>
+        <div class="fix"><b>Pointspot ช่วย:</b> เก็บฐานข้อมูลสมาชิกเป็นของโรงแรม แล้วส่งสิทธิพิเศษเชิญกลับมาพักผ่าน LINE OA โดยตรง</div>
+      </article>
+
+      <article class="pain-card">
+        <div class="n">02</div>
+        <h3>แขกพักครั้งเดียวแล้วหาย (One-Time Visitors)</h3>
+        <p>ไม่มีฐานข้อมูลแขกที่เคยเข้าพัก และไม่มีเครื่องมือที่ทำให้แขกมีเหตุผลกลับมาพักซ้ำ ทุกเดือนจึงต้องเริ่มหาลูกค้าใหม่ตั้งแต่ต้น</p>
+        <div class="fix"><b>Pointspot ช่วย:</b> แต้มสะสมและระดับสมาชิกสร้างเหตุผลให้กลับมา พร้อมวัดผลอัตราการกลับมาพักซ้ำได้จริง</div>
+      </article>
+
+      <article class="pain-card">
+        <div class="n">03</div>
+        <h3>ยอดขาย F&amp;B และสปาแยกส่วนจากห้องพัก</h3>
+        <p>แขกที่พักไม่ได้ใช้บริการเสริมภายในโรงแรม ยอดขายแต่ละแผนกอยู่คนละระบบ ทำให้เสียโอกาสเพิ่ม Total Revenue per Guest</p>
+        <div class="fix"><b>Pointspot ช่วย:</b> รวมแต้มจากทุกแผนกไว้ในบัญชีเดียว และใช้คูปองดึงแขกห้องพักเข้าห้องอาหารและสปา</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HERO IMAGE CONTENT ===================== -->
+<section class="snapshot" id="loyalty-journey">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Loyalty Journey</span>
+      <h2>เส้นทางลูกค้าโรงแรมและรีสอร์ทด้วย Pointspot</h2>
+      <p>ภาพรวมวิธีเปลี่ยนแขกหนึ่งครั้ง ให้กลายเป็นสมาชิกที่กลับมาจองตรงกับโรงแรม</p>
+    </div>
+
+    <div class="snapshot-grid">
+      <article class="snap-card">
+        <div class="snap-top">
+          <div class="snap-num">1</div>
+          <div class="snap-kicker">Check-in / Front Desk</div>
+        </div>
+        <h3>เช็คอินที่เคาน์เตอร์ต้อนรับ</h3>
+        <p class="sub">แขกสแกน QR สมัครสมาชิกผ่าน LINE OA ด้วยเบอร์โทรศัพท์ ไม่ต้องโหลดแอป</p>
+        <p class="snap-note">รับแต้มต้อนรับและคูปองทันที</p>
+      </article>
+
+      <article class="snap-card">
+        <div class="snap-top">
+          <div class="snap-num">2</div>
+          <div class="snap-kicker">Dining &amp; F&amp;B</div>
+        </div>
+        <h3>ห้องอาหาร บาร์ และรูมเซอร์วิส</h3>
+        <p class="sub">พนักงานให้แต้มจากยอดใช้จ่าย หรือให้แขกใช้คูปองที่จุดชำระเงิน</p>
+        <p class="snap-note">เชื่อมรายได้ F&amp;B เข้าบัญชีสมาชิกเดียว</p>
+      </article>
+
+      <article class="snap-card">
+        <div class="snap-top">
+          <div class="snap-num">3</div>
+          <div class="snap-kicker">Spa &amp; Wellness</div>
+        </div>
+        <h3>สปาและบริการผ่อนคลาย</h3>
+        <p class="sub">แขกสะสมแต้มจากสปาหรือ Wellness และแลกคูปองรางวัลได้</p>
+        <p class="snap-note">คูปองดิจิทัลตรวจสอบและตัดสิทธิ์ได้</p>
+      </article>
+
+      <article class="snap-card">
+        <div class="snap-top">
+          <div class="snap-num">4</div>
+          <div class="snap-kicker">Check-out &amp; Tier</div>
+        </div>
+        <h3>เช็คเอาต์และรักษาฐานลูกค้า</h3>
+        <p class="sub">แต้มจากห้องพัก ห้องอาหาร และสปา รวมอยู่ในโปรไฟล์ลูกค้าเดียว</p>
+        <p class="snap-note">เห็นมูลค่าลูกค้าตลอดการเข้าพัก</p>
+      </article>
+
+      <article class="snap-card">
+        <div class="snap-top">
+          <div class="snap-num">5</div>
+          <div class="snap-kicker">Post-stay &amp; Re-visit</div>
+        </div>
+        <h3>หลังเข้าพักและการกลับมาพักซ้ำ</h3>
+        <p class="sub">โรงแรมส่งสิทธิพิเศษผ่าน LINE OA เพื่อชวนแขกเดิมกลับมาพักอีกครั้ง</p>
+        <p class="snap-note">เพิ่ม Repeat Stay และ Direct Booking</p>
+      </article>
+    </div>
+
+    <div class="snapshot-outcomes">
+      <div class="outcome">
+        <div class="label">Data Ownership</div>
+        <p>โรงแรมเป็นเจ้าของฐานข้อมูลสมาชิก</p>
+      </div>
+      <div class="outcome">
+        <div class="label">Revenue per Guest</div>
+        <p>เพิ่มการใช้จ่ายข้ามแผนก</p>
+      </div>
+      <div class="outcome">
+        <div class="label">Direct Booking</div>
+        <p>ชวนแขกกลับมาจองตรง</p>
+      </div>
+      <div class="outcome">
+        <div class="label">Scope</div>
+        <p>ทำงานร่วมกับ PMS และ Booking Engine เดิม</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== JOURNEY ===================== -->
+<section class="journey" id="journey">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Customer Journey</span>
+      <h2>ระบบทำงานอย่างไรในโรงแรมของคุณ</h2>
+      <p>ตั้งแต่แขกเช็คอินที่เคาน์เตอร์ จนถึงการกลับมาพักครั้งถัดไป ทุกขั้นตอนอยู่บนฐานข้อมูลสมาชิกเดียวกัน</p>
+    </div>
+
+    <div class="steps">
+
+      <article class="step">
+        <div class="num">1</div>
+        <h3>เช็คอินที่เคาน์เตอร์ต้อนรับ</h3>
+        <div class="en">Check-in / Front Desk</div>
+        <ul>
+          <li>แขกสแกน <b>QR Code</b> ที่เคาน์เตอร์</li>
+          <li>สมัครสมาชิกผ่าน <b>LINE OA (LIFF)</b> ด้วยเบอร์โทรศัพท์ ไม่ต้องดาวน์โหลดแอป</li>
+          <li>รับ <b>แต้มต้อนรับ</b> และ <b>Welcome Coupon</b> ทันที เช่น ส่วนลด F&amp;B 10% หรือ Welcome Drink</li>
+        </ul>
+      </article>
+
+      <article class="step">
+        <div class="num">2</div>
+        <h3>ห้องอาหาร บาร์ และรูมเซอร์วิส</h3>
+        <div class="en">Dining &amp; F&amp;B</div>
+        <ul>
+          <li>พนักงาน <b>คีย์เบอร์โทรศัพท์</b> หรือ <b>สแกน QR ของสมาชิก</b> เพื่อให้แต้มตามยอดใช้จ่าย (1 บาท = X แต้ม)</li>
+          <li>แขกใช้ <b>Welcome Dining Voucher</b> แลกส่วนลดที่จุดชำระเงินได้ทันที</li>
+          <li>ทุกจุดบริการให้แต้มได้ด้วย <b>รหัส PIN ของพนักงาน</b></li>
+        </ul>
+      </article>
+
+      <article class="step">
+        <div class="num">3</div>
+        <h3>สปาและบริการผ่อนคลาย</h3>
+        <div class="en">Relaxation &amp; Spa</div>
+        <ul>
+          <li>แขกใช้บริการสปา ฟิตเนส หรือ Wellness ของโรงแรม</li>
+          <li>สะสมแต้มจากยอดใช้จ่าย และ <b>แลกคูปองรางวัลสปา</b> จากแต้มที่มี</li>
+          <li>พนักงาน <b>ตรวจสอบและตัดสิทธิ์คูปอง</b> ผ่าน Pointspot Admin ป้องกันการใช้ซ้ำ</li>
+        </ul>
+      </article>
+
+      <article class="step">
+        <div class="num">4</div>
+        <h3>เช็คเอาต์และรักษาฐานลูกค้า</h3>
+        <div class="en">Check-out &amp; Loyalty Retention</div>
+        <ul>
+          <li>ยอดใช้จ่าย <b>ห้องพัก ห้องอาหาร และสปา</b> รวมเป็น <b>แต้มยอดเดียว</b></li>
+          <li><b>อัปเกรดระดับสมาชิกอัตโนมัติ</b> เมื่อถึงเกณฑ์ เช่น Silver เป็น Gold VIP</li>
+          <li>ระบบ <b>แจ้งเตือนแต้มและสิทธิพิเศษผ่าน LINE OA</b> ให้แขกโดยอัตโนมัติ</li>
+        </ul>
+      </article>
+
+      <article class="step">
+        <div class="num">5</div>
+        <h3>หลังเข้าพักและการกลับมาพักซ้ำ</h3>
+        <div class="en">Post-Stay &amp; Re-engagement</div>
+        <ul>
+          <li>โรงแรม <b>ส่งคูปองสิทธิพิเศษเฉพาะกลุ่มผ่าน LINE OA</b> เช่น โปรช่วง Low-season หรือคูปองวันครบรอบ</li>
+          <li>กระตุ้นให้แขกเดิม <b>ติดต่อจองตรงกับโรงแรม</b> ในการเข้าพักครั้งถัดไป</li>
+          <li>ลดการพึ่งพาช่องทางที่มี <b>ค่าคอมมิชชั่นสูง</b> และวัดผลการกลับมาพักซ้ำได้</li>
+        </ul>
+      </article>
+
+      <article class="step">
+        <div class="num" aria-hidden="true">✓</div>
+        <h3>ผลลัพธ์ที่โรงแรมได้รับ</h3>
+        <div class="en">Business Outcome</div>
+        <ul>
+          <li>ฐานข้อมูลสมาชิกเป็นของโรงแรม นำไปทำการตลาดซ้ำได้เอง</li>
+          <li>Total Revenue per Guest สูงขึ้นจากการใช้บริการข้ามแผนก</li>
+          <li>สัดส่วน Direct Booking และการกลับมาพักซ้ำเพิ่มขึ้นอย่างวัดผลได้</li>
+        </ul>
+      </article>
+
+    </div>
+
+    <p class="journey-note"><b>ขอบเขตการทำงาน:</b> Pointspot เป็นแพลตฟอร์ม Loyalty, Points, Coupons และ Member CRM ทำงานร่วมกับระบบ PMS และ Booking Engine ที่โรงแรมใช้อยู่ ไม่ได้เป็นระบบจองห้องพักหรือระบบนัดหมายคิว</p>
+  </div>
+</section>
+
+<!-- ===================== FEATURES ===================== -->
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Key Features</span>
+      <h2>ฟีเจอร์ที่ออกแบบมาเพื่อธุรกิจโรงแรม</h2>
+      <p>เครื่องมือ Loyalty ที่ทีมหน้าบ้านใช้งานได้จริง และทีมการตลาดนำข้อมูลไปต่อยอดได้</p>
+    </div>
+    <div class="feat-grid">
+
+      <article class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/><path d="M3 13h18"/></svg></div>
+        <h3>สะสมแต้มรวมทุกแผนกในระบบเดียว</h3>
+        <p>ยอดใช้จ่ายจากห้องพัก ห้องอาหาร และสปา สะสมเข้าบัญชีสมาชิกเดียวกัน เห็นมูลค่าที่แท้จริงของแขกแต่ละคนตลอดการเข้าพัก</p>
+      </article>
+
+      <article class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div>
+        <h3>แคมเปญแต้มพิเศษ x2 / x3</h3>
+        <p>ตั้งช่วงเวลาให้แต้มคูณสอง คูณสาม เพื่อกระตุ้นการเข้าพักช่วง Low-season วันธรรมดา หรือช่วงที่ห้องว่างมาก โดยกำหนดวันเริ่มและวันสิ้นสุดล่วงหน้าได้</p>
+      </article>
+
+      <article class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.4l6-.9z"/></svg></div>
+        <h3>ระดับสมาชิก Member / Silver / Gold</h3>
+        <p>แบ่งระดับสมาชิกตามยอดสะสม อัปเกรดอัตโนมัติเมื่อถึงเกณฑ์ พร้อมกำหนดสิทธิพิเศษเฉพาะระดับ เพื่อดูแลแขก VIP ให้ต่างจากแขกทั่วไป</p>
+      </article>
+
+      <article class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 010-4h18a2 2 0 010 4 2 2 0 000 4 2 2 0 010 4H3a2 2 0 010-4 2 2 0 000-4z"/><path d="M9 5v14" stroke-dasharray="2 3"/></svg></div>
+        <h3>คูปองและเวาเชอร์ 6 รูปแบบ</h3>
+        <p>ครอบคลุมทั้งบริการห้องพัก อาหาร และสปา ตั้งแต่คูปองต้อนรับ คูปองแลกแต้ม ไปจนถึงบัตรกำนัลเงินสดดิจิทัล ตัดสิทธิ์ผ่านระบบ ตรวจสอบย้อนหลังได้ทุกใบ</p>
+      </article>
+
+      <article class="feat wide">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 01-8.5 8.4 9.6 9.6 0 01-2.6-.3L5 21l1.3-3.4A8.2 8.2 0 014 11.5C4 6.8 7.8 3 12.5 3S21 6.8 21 11.5z"/></svg></div>
+        <h3>แจ้งเตือนแต้มและสิทธิพิเศษผ่าน LINE OA</h3>
+        <p>แขกเชื่อมต่อบัตรสมาชิกกับ LINE OA ของโรงแรมได้ในขั้นตอนเดียว จากนั้นทุกครั้งที่ได้รับแต้ม แลกคูปอง หรือมีสิทธิพิเศษใหม่ ระบบจะแจ้งเตือนอัตโนมัติ โรงแรมจึงสื่อสารกับแขกได้โดยตรงบนช่องทางที่แขกเปิดอ่านจริง ไม่ต้องให้แขกดาวน์โหลดแอปเพิ่ม</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COUPONS ===================== -->
+<section class="coupons" id="coupons">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Coupons &amp; Vouchers</span>
+      <h2>คูปองและเวาเชอร์ 6 รูปแบบ สำหรับโรงแรมและรีสอร์ท</h2>
+      <p>ออกแบบสิทธิพิเศษได้ตามช่วงเวลาและตามกลุ่มแขก แจกผ่าน LINE OA และตัดสิทธิ์ที่หน้างานได้ทันที</p>
+    </div>
+    <div class="coupon-grid">
+
+      <article class="coupon">
+        <span class="tag">Welcome</span>
+        <h3>คูปองต้อนรับสมาชิกใหม่</h3>
+        <p>มอบให้อัตโนมัติทันทีที่แขกสมัครสมาชิกที่เคาน์เตอร์ เปลี่ยนการเช็คอินให้เป็นความประทับใจแรก</p>
+        <div class="ex">ตัวอย่าง: <b>ส่วนลดห้องอาหาร 10%</b> หรือ <b>Welcome Drink 1 แก้ว</b></div>
+      </article>
+
+      <article class="coupon">
+        <span class="tag">Reward</span>
+        <h3>คูปองแลกแต้ม</h3>
+        <p>ให้แขกใช้แต้มสะสมแลกของรางวัลหรือบริการภายในโรงแรม สร้างเหตุผลให้สะสมแต้มต่อเนื่อง</p>
+        <div class="ex">ตัวอย่าง: ใช้ <b>500 แต้ม</b> แลก <b>Afternoon Tea Set</b> หรือ <b>สปา 30 นาที</b></div>
+      </article>
+
+      <article class="coupon">
+        <span class="tag">Receipt-Tail</span>
+        <h3>คูปองแนบท้ายใบเสร็จ</h3>
+        <p>ตั้งเงื่อนไขยอดใช้จ่าย เพื่อส่งคูปองข้ามแผนกอัตโนมัติ ดึงแขกจากห้องอาหารไปใช้บริการสปาต่อ</p>
+        <div class="ex">ตัวอย่าง: ทานอาหารครบ <b>1,000 บาท</b> รับ <b>ส่วนลดสปา 20%</b> ใช้ได้ระหว่างเข้าพัก</div>
+      </article>
+
+      <article class="coupon">
+        <span class="tag">Gift Voucher</span>
+        <h3>บัตรกำนัลเงินสดดิจิทัล</h3>
+        <p>ขายหรือมอบเป็นของขวัญในรูปแบบดิจิทัล ตัดยอดใช้บางส่วนได้ ไม่ต้องพิมพ์บัตรกระดาษ</p>
+        <div class="ex">ตัวอย่าง: <b>Gift Voucher 2,000 บาท</b> สำหรับแพ็กเกจพักผ่อนหรือมื้อพิเศษ</div>
+      </article>
+
+      <article class="coupon">
+        <span class="tag">Birthday</span>
+        <h3>คูปองของขวัญเดือนเกิด</h3>
+        <p>ระบบส่งสิทธิพิเศษให้สมาชิกในเดือนเกิดโดยอัตโนมัติ ดึงแขกกลับมาฉลองโอกาสพิเศษที่โรงแรม</p>
+        <div class="ex">ตัวอย่าง: <b>เค้กวันเกิด</b> หรือ <b>ส่วนลดห้องพัก 15%</b> เฉพาะเดือนเกิด</div>
+      </article>
+
+      <article class="coupon">
+        <span class="tag">Off-peak / Flash</span>
+        <h3>คูปองจำกัดเวลาช่วง Low-Season</h3>
+        <p>ตั้งวันหมดอายุสั้น เพื่อเร่งการตัดสินใจในช่วงที่ห้องว่างมาก หรือวันธรรมดาที่ยอดเข้าพักต่ำ</p>
+        <div class="ex">ตัวอย่าง: <b>ส่วนลดพิเศษวันอาทิตย์ถึงวันพฤหัสบดี</b> ใช้ได้ภายใน 30 วัน</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>คำถามที่ผู้บริหารโรงแรมถามบ่อย</h2>
+    </div>
+    <div class="faq-list">
+
+      <details open>
+        <summary>Pointspot ใช้ร่วมกับระบบ PMS และ Booking Engine ที่โรงแรมใช้อยู่ได้หรือไม่</summary>
+        <div class="a">
+          <p>ได้ Pointspot ทำงานคู่ขนานกับระบบเดิม ไม่ต้องเปลี่ยน PMS หรือ Booking Engine ที่ใช้อยู่ เชื่อมต่อได้ 2 แนวทาง คือ ผ่าน <b>Open API</b> เพื่อส่งยอดใช้จ่ายเข้ามาให้แต้มอัตโนมัติ หรือให้พนักงานหน้าบ้าน <b>ให้แต้มด้วยรหัส PIN</b> หลังรับชำระเงิน ซึ่งเริ่มใช้งานได้ทันทีโดยไม่ต้องรอฝ่าย IT</p>
+          <p><b>ขอบเขตที่ชัดเจน:</b> Pointspot ไม่ได้มาแทน Booking Engine และไม่มีระบบจองห้องพักในตัว หน้าที่ของ Pointspot คือดูแลส่วน Loyalty และผลักดัน Direct Booking ผ่านฐานข้อมูลสมาชิกของโรงแรม</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>โรงแรมมีหลายจุดบริการ ทั้งห้องอาหาร บาร์ และสปา รองรับหรือไม่</summary>
+        <div class="a">
+          <p>รองรับ กำหนดจุดบริการและสาขาได้หลายจุดภายใต้ธุรกิจเดียวกัน พนักงานแต่ละจุดมีรหัสผู้ใช้และสิทธิ์การเข้าถึงของตนเอง แต้มของแขกยังรวมอยู่ในบัญชีเดียว ขณะที่รายงานแยกดูได้ว่าแต้มและการแลกรางวัลเกิดขึ้นที่จุดบริการใด</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>พนักงานต้องอบรมนานไหม ช่วง High-season จะใช้ทันหรือไม่</summary>
+        <div class="a">
+          <p>ใช้งานผ่านเว็บเบราว์เซอร์บนมือถือหรือแท็บเล็ต ไม่ต้องติดตั้งโปรแกรมและไม่ต้องใช้อุปกรณ์เพิ่ม ขั้นตอนให้แต้มมี 3 ขั้น คือ คีย์เบอร์โทรศัพท์ของแขก ใส่ยอดใช้จ่าย แล้วยืนยันด้วยรหัส PIN โดยทั่วไปพนักงานใหม่เรียนรู้ได้ภายในกะแรกของการทำงาน</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>ข้อมูลลูกค้าเป็นของโรงแรมหรือของแพลตฟอร์ม</summary>
+        <div class="a">
+          <p>ข้อมูลสมาชิกเป็นของโรงแรม โรงแรมดูรายชื่อสมาชิก ยอดแต้ม ประวัติการใช้จ่าย และส่งออกข้อมูลไปใช้งานต่อได้ การเก็บข้อมูลมีขั้นตอนขอความยินยอมตาม PDPA ตั้งแต่หน้าสมัครสมาชิก ต่างจากการรับลูกค้าผ่านแพลตฟอร์มภายนอกที่โรงแรมมักไม่ได้ข้อมูลติดต่อของแขกไว้ทำการตลาดซ้ำ</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>แขกต่างชาติหรือแขกที่ไม่ได้ใช้ LINE สมัครสมาชิกได้หรือไม่</summary>
+        <div class="a">
+          <p>ได้ หัวใจของระบบคือเบอร์โทรศัพท์ แขกสะสมแต้มและเปิดบัตรสมาชิกดิจิทัลผ่านลิงก์บนเว็บเบราว์เซอร์ได้โดยไม่ต้องมีบัญชี LINE ส่วนการเชื่อมต่อ LINE OA เป็นช่องทางเสริมสำหรับแจ้งเตือนแต้มและส่งคูปองอัตโนมัติ ซึ่งเหมาะกับกลุ่มแขกในประเทศเป็นหลัก</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="cta" id="cta">
+  <div class="wrap">
+    <h2>เริ่มสร้างฐานลูกค้าประจำของโรงแรมคุณวันนี้</h2>
+    <p>ทดลองใช้ฟรี ตั้งค่าระบบแต้มและคูปองชุดแรกได้ภายในวันเดียว หรือให้ทีมงานช่วยออกแบบโครงสร้างสิทธิพิเศษให้เหมาะกับโรงแรมของคุณ</p>
+    <div class="row">
+      <a class="btn btn-white" href="#">ทดลองใช้ฟรี</a>
+      <a class="btn btn-ghost" href="#">ปรึกษาทีมงาน</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <h4>Pointspot</h4>
+      <p>ระบบสะสมแต้ม คูปอง และบัตรสมาชิกดิจิทัล โดย บริษัท เรดดี้แพลนเน็ต จำกัด (มหาชน)</p>
+    </div>
+    <div>
+      <h4>ติดต่อ</h4>
+      <p>โทร 02-016-6777</p>
+      <p><a href="mailto:pointspot@readyplanet.com">pointspot@readyplanet.com</a></p>
+    </div>
+    <div>
+      <h4>ข้อมูลเพิ่มเติม</h4>
+      <p><a href="https://www.pointspot.co/">www.pointspot.co</a></p>
+      <p><a href="https://manual.pointspot.co/">คู่มือการใช้งาน</a> · <a href="https://faq.pointspot.co/">คำถามที่พบบ่อย</a></p>
+    </div>
+    <div class="copy" style="grid-column:1/-1;">© 2026 Readyplanet Public Company Limited · เอกสารร่างหน้า Landing Page สำหรับกลุ่มธุรกิจโรงแรมและรีสอร์ท</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var header = document.querySelector('.site-header');
+  var hero = document.querySelector('.hero');
+  if (!header || !hero) return;
+  var io = new IntersectionObserver(function(entries){
+    header.classList.toggle('is-scrolled', !entries[0].isIntersecting);
+  }, {rootMargin:'-72px 0px 0px 0px', threshold:0});
+  io.observe(hero);
+})();
+</script>
+
+</body>
+</html>
